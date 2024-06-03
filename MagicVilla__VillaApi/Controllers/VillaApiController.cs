@@ -134,6 +134,12 @@ namespace MagicVilla__VillaApi.Controllers
 
             patchDTO.ApplyTo(villa, ModelState);
 
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return NoContent();
         }
 
     }
