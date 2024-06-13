@@ -150,6 +150,7 @@ namespace MagicVilla__VillaApi.Controllers
 
             if(!ModelState.IsValid)
             {
+                _logger.LogError("Bad request");
                 return BadRequest(ModelState);
             }
 
