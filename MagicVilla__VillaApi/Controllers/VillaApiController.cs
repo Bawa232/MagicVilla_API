@@ -11,6 +11,12 @@ namespace MagicVilla__VillaApi.Controllers
     [ApiController]
     public class VillaApiController : ControllerBase
     {
+
+        private readonly ILogger<VillaApiController> _logger;
+        public VillaApiController(ILogger<VillaApiController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         [ProducesResponseType(200)]
 
@@ -60,6 +66,7 @@ namespace MagicVilla__VillaApi.Controllers
             }
             if (villaDTO == null)
             {
+                _logger.LogError("Bad request");
                 return BadRequest(villaDTO);
             }
 
@@ -88,6 +95,7 @@ namespace MagicVilla__VillaApi.Controllers
             var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
             if (villa == null)
             {
+                _logger.LogError("Record not found");
                 return NotFound();
             }
 
@@ -100,12 +108,18 @@ namespace MagicVilla__VillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult UpdateVilla(int id, [FromBody]VillaDTO villaDTO)
         {
-            if (id == null || id != villaDTO.Id)
+            if (id == 0 || id != villaDTO.Id)
             {
+                _logger.LogError("record does not exist");
                 return BadRequest();
             }
 
             var villa = VillaStore.villaList.FirstOrDefault(u => id == u.Id);
+
+            if(villa == null)
+            {
+                return BadRequest();
+            }
 
             villa.Name =villaDTO.Name;
             villa.Sqft = villaDTO.Sqft;

@@ -1,4 +1,9 @@
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration().WriteTo.File("Logs/villa_logs.txt")
+    .CreateLogger();
 
 // Add services to the container.
 
